@@ -1,19 +1,29 @@
 var pg_connect = require('./pg_connect');
 
-function display_products() {
+async function display_products(shopId) {
     // query data base to get the table data
-    pg_connect.connect((err) => {
-        var query = 'SELECT * FROM products WHERE shop_id = 1';
-        pg_connect.query(query, (err, result) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                var data = result.rows;
-                console.log(data);
-            }
-        })
-    })
+    // pg_connect.connect((err) => {
+    //     var query = 'SELECT * FROM products WHERE shop_id = 1';
+    //     pg_connect.query(query, (err, result) => {
+    //         if (err) {
+    //             console.log(err);
+    //         }
+    //         else {
+    //             var data = result.rows;
+    //             console.log(data);
+    //         }
+    //     })
+    // })
+
+    // define query
+    let productsQuery = {
+        text: 'SELECT * FROM products WHERE shop_id = $1',
+        values: [shopId]
+    }
+
+    // query data
+    const data = await pg_connect.query(productsQuery);
+
     let table_string = `
 <style>
 table {
@@ -45,10 +55,11 @@ tr:nth-child(even) {
     // display all rows of table 
     table_string += `</table>`;
 
+    console.log(data);
     return table_string;
 }
 
-display_products()
+
 
 // export table
 module.exports = display_products;
