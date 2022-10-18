@@ -18,12 +18,12 @@ router.post('/login', async function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
   // console.log(username, password);
-  
+
 
   let [authenticated, shopId] = await authen(username, password);
   console.log(authenticated);
   if (authenticated == true) {
-    let table = display_products(shopId);
+    let table = await display_products(shopId);
     res.render('users', {
       title: 'welcome to ATN-SHOP',
       name: username,

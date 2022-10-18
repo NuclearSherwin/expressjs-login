@@ -1,30 +1,17 @@
 var pg_connect = require('./pg_connect');
 
 async function display_products(shopId) {
-    // query data base to get the table data
-    // pg_connect.connect((err) => {
-    //     var query = 'SELECT * FROM products WHERE shop_id = 1';
-    //     pg_connect.query(query, (err, result) => {
-    //         if (err) {
-    //             console.log(err);
-    //         }
-    //         else {
-    //             var data = result.rows;
-    //             console.log(data);
-    //         }
-    //     })
-    // })
+  // define query
+  let productsQuery = {
+    text: 'SELECT * FROM products WHERE shop_id = $1',
+    values: [shopId]
+  }
 
-    // define query
-    let productsQuery = {
-        text: 'SELECT * FROM products WHERE shop_id = $1',
-        values: [shopId]
-    }
+  // query data
+  const data = await pg_connect.query(productsQuery);
+  pg_connect.end();
 
-    // query data
-    const data = await pg_connect.query(productsQuery);
-
-    let table_string = `
+  let table_string = `
 <style>
 table {
   font-family: arial, sans-serif;
@@ -49,14 +36,30 @@ tr:nth-child(even) {
 
 <table>
   <tr>`;
-    // display all header of table
+  //--- display all header of table
+  let num_fields = data.fields.length;
+  for (let i = 0; i < num_fields; i++) {
+    table_string += `<td>${data.fields[i].name}</td>`;
+  }
+  table_string += `</tr>`;
+
+  //--- display all rows of table 
+  let num_rows = data.rows.length;
+  for (let i = 0; i < num_rows; i++) {
+    table_string += `<tr>`;
+    for (let j = 0; j < num_fields; j++) {
+      let field_name = data.fields[j].name;
+      let cell = data.rows[i][field_name];
+      table_string += `<td>${cell}</td>`;
+    }
+    // add row
     table_string += `</tr>`;
+  }
 
-    // display all rows of table 
-    table_string += `</table>`;
 
-    console.log(data);
-    return table_string;
+  table_string += `</table>`;
+  // console.log(data);
+  return table_string;
 }
 
 

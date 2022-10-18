@@ -11,7 +11,7 @@ async function authen(user, pass) {
     if (query_data.rowCount == 1) {
         authenticated = true;
         // take id
-        shopId = query_data.rows.shop_id;
+        shopId = query_data.rows[0].shop_id;
     }
 
     // console.log(query_data);
