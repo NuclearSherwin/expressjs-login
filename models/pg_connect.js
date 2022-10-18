@@ -9,4 +9,6 @@ const pg_con = new Pool({
         rejectUnauthorized: false
     }
 });
+
+
 module.exports = pg_con;

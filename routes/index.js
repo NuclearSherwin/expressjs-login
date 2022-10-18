@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var authen = require('../models/authenticator');
+var pg_con = require('../models/pg_connect');
+var display_products = require('../models/table_display');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -8,23 +10,53 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  res.render('login', { title: 'ATN-SHOP' });
+  res.render('login', { title: 'ATN-SHOP', message: '' });
 });
 
 // Process for POST Request
 router.post('/login', async function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
-  console.log(username, password);
-  let authenticated = await authen(username, password);
+  // console.log(username, password);
+  
+
+  let [authenticated, shopId] = await authen(username, password);
   console.log(authenticated);
   if (authenticated == true) {
-    res.render('users', { title: 'welcome to ATN-SHOP' });
+    let table = display_products(shopId);
+    res.render('users', {
+      title: 'welcome to ATN-SHOP',
+      name: username,
+      table_string: table,
+    });
   }
   else {
-    res.render('login', { title: 'ATN SHOP Login' },
-      message = 'wrong username or password!');
+    res.render('login', {
+      title: 'ATN SHOP Login',
+      message: 'wrong username or password!'
+    });
   }
+
+});
+
+router.post('/login/shops', function (req, res, next) {
+  pg_con.connect(function (err) {
+    var query = `SELECT * FROM shops`;
+    pg_con.query(query, (err, data) => {
+      if (err)
+        console.log(err);
+      else {
+        console.log(data.rows);
+        console.log('successfully connected to shops!')
+        res.render('shops', {
+          title: 'shops',
+          message: 'Shops management',
+          shopData: data.rows
+        })
+      }
+    })
+  })
+
 });
 
 module.exports = router;
