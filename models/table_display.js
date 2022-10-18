@@ -9,7 +9,7 @@ async function display_products(shopId) {
 
   // query data
   const data = await pg_connect.query(productsQuery);
-  pg_connect.end();
+  // pg_connect.end();
 
   let table_string = `
 <style>

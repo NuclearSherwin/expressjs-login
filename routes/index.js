@@ -20,14 +20,22 @@ router.post('/login', async function (req, res, next) {
   // console.log(username, password);
 
 
-  let [authenticated, shopId] = await authen(username, password);
+  let [authenticated, shopId, role] = await authen(username, password);
   console.log(authenticated);
-  if (authenticated == true) {
+  if (authenticated == true & role == 'storeowner') {
+    // display product
     let table = await display_products(shopId);
     res.render('users', {
       title: 'welcome to ATN-SHOP',
       name: username,
       table_string: table,
+    });
+  }
+  else if (authenticated == true & role == 'admin') {
+    res.render('admin', {
+      title: 'welcome Amin to ATN-SHOP',
+      name: username,
+      // table_string: table,
     });
   }
   else {
@@ -58,5 +66,7 @@ router.post('/login/shops', function (req, res, next) {
   })
 
 });
+
+
 
 module.exports = router;
