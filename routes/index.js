@@ -3,6 +3,7 @@ var router = express.Router();
 var authen = require('../models/authenticator');
 var pg_con = require('../models/pg_connect');
 var display_products = require('../models/table_display');
+var gen_box = require('../models/select_box');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -31,10 +32,13 @@ router.post('/login', async function (req, res, next) {
       table_string: table,
     });
   }
+  // for admin
   else if (authenticated == true & role == 'admin') {
+    let box_string = await gen_box();
     res.render('admin', {
       title: 'welcome Amin to ATN-SHOP',
       name: username,
+      select_box: box_string,
       // table_string: table,
     });
   }
