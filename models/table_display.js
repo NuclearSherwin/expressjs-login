@@ -6,17 +6,17 @@ const { values } = require("pg/lib/native/query");
 async function display_products(shopId) {
   // define query
 
-    var productsQuery;
+  var productsQuery;
 
-    if (shopId == 0) {
-        productsQuery = `SELECT * FROM products`;
+  if (shopId == 0) {
+    productsQuery = `SELECT * FROM products`;
+  }
+  else {
+    productsQuery = {
+      text: 'SELECT * FROM products WHERE shop_id = $1',
+      values: [shopId]
     }
-    else {
-        productsQuery = {
-            text: 'SELECT * FROM products WHERE shop_id = $1',
-            values: [shopId]
-        }
-    }
+  }
 
   // query data
   const data = await pg_connect.query(productsQuery);

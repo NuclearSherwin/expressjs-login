@@ -35,12 +35,12 @@ router.post('/login', async function (req, res, next) {
   // for admin
   else if (authenticated == true & role == 'admin') {
     let box_string = await gen_box();
-     let table = await display_products(shopId);
+    let table = await display_products(shopId);
     res.render('admin', {
       title: 'welcome Admin to ATN-SHOP',
       name: username,
       select_box: box_string,
-        table_string: table,
+      table_string: table,
     });
   }
   else {
@@ -54,12 +54,16 @@ router.post('/login', async function (req, res, next) {
 
 // display for each shop
 router.post('/select_box', async function (req, res, next) {
+  let shop_id = req.body.shop;
+  console.log("VALUE: " + shop_id);
   let box_string = await gen_box();
+  let table = await display_products(shop_id);
 
   res.render('admin', {
-    title: 'welcome to allshop',
-    message: 'wrong username or password!',
+    title: 'welcome to ATN SHOP',
+    message: 'Hi',
     select_box: box_string,
+    table_string: table,
   });
 });
 

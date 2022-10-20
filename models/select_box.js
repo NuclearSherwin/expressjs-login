@@ -26,7 +26,7 @@ async function gen_box() {
         <input type="submit" value="view">
         </form>
     `
-    console.log(data);
+    // console.log(data);
     return box_string;
 
 }
