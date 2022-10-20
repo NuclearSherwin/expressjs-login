@@ -30,6 +30,18 @@ table {
   width: 100%;
 }
 
+.insert-button {
+  background-color: #4dff00;
+}
+
+.edit-button {
+  background-color: #e8ff00;
+}
+
+.delete-button {
+  background-color: #ff0032;
+}
+
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
@@ -44,7 +56,7 @@ tr:nth-child(even) {
 <body>
 
 <h2>Table products</h2>
-
+red
 <table>
   <tr>`;
   //--- display all header of table
@@ -52,6 +64,7 @@ tr:nth-child(even) {
   for (let i = 0; i < num_fields; i++) {
     table_string += `<td>${data.fields[i].name}</td>`;
   }
+  table_string += `<th>Action</th>`;
   table_string += `</tr>`;
 
   //--- display all rows of table 
@@ -63,7 +76,13 @@ tr:nth-child(even) {
       let cell = data.rows[i][field_name];
       table_string += `<td>${cell}</td>`;
     }
+
     // add row
+    table_string += `<th>
+      <button class="insert-button">Insert</button>
+      <button class="edit-button">Edit</button>
+      <button class="delete-button">Delete</button>
+    </th>`;
     table_string += `</tr>`;
   }
 
