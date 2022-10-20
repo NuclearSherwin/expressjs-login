@@ -1,11 +1,22 @@
 var pg_connect = require('./pg_connect');
+const { values } = require("pg/lib/native/query");
 
+
+// products
 async function display_products(shopId) {
   // define query
-  let productsQuery = {
-    text: 'SELECT * FROM products WHERE shop_id = $1',
-    values: [shopId]
-  }
+
+    var productsQuery;
+
+    if (shopId == 0) {
+        productsQuery = `SELECT * FROM products`;
+    }
+    else {
+        productsQuery = {
+            text: 'SELECT * FROM products WHERE shop_id = $1',
+            values: [shopId]
+        }
+    }
 
   // query data
   const data = await pg_connect.query(productsQuery);
@@ -62,7 +73,5 @@ tr:nth-child(even) {
   return table_string;
 }
 
-
-
-// export table
+// export tables
 module.exports = display_products;

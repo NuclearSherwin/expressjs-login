@@ -35,11 +35,12 @@ router.post('/login', async function (req, res, next) {
   // for admin
   else if (authenticated == true & role == 'admin') {
     let box_string = await gen_box();
+     let table = await display_products(shopId);
     res.render('admin', {
-      title: 'welcome Amin to ATN-SHOP',
+      title: 'welcome Admin to ATN-SHOP',
       name: username,
       select_box: box_string,
-      // table_string: table,
+        table_string: table,
     });
   }
   else {
@@ -51,7 +52,18 @@ router.post('/login', async function (req, res, next) {
 
 });
 
-router.post('/login/shops', function (req, res, next) {
+// display for each shop
+router.post('/select_box', async function (req, res, next) {
+  let box_string = await gen_box();
+
+  res.render('admin', {
+    title: 'welcome to allshop',
+    message: 'wrong username or password!',
+    select_box: box_string,
+  });
+});
+
+router.post('/login/shops', function (req, reks, next) {
   pg_con.connect(function (err) {
     var query = `SELECT * FROM shops`;
     pg_con.query(query, (err, data) => {

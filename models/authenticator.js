@@ -1,4 +1,5 @@
 var pg_con = require('./pg_connect')
+
 async function authen(user, pass) {
     let authenticated = false;
     let shopId;
@@ -21,4 +22,7 @@ async function authen(user, pass) {
     return [authenticated, shopId, role];
 
 }
+
+
+
 module.exports = authen;
