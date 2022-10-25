@@ -4,7 +4,7 @@ var authen = require('../models/authenticator');
 var pg_con = require('../models/pg_connect');
 var display_products = require('../models/table_display');
 var gen_box = require('../models/select_box');
-
+var session;
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -18,6 +18,8 @@ router.post('/', function (req, res, next) {
 router.post('/login', async function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
+  session = req.session;
+
   // console.log(username, password);
 
 
@@ -25,23 +27,20 @@ router.post('/login', async function (req, res, next) {
   console.log(authenticated);
   if (authenticated == true & role == 'storeowner') {
     // display product
-    let table = await display_products(shopId);
-    res.render('users', {
-      title: 'welcome to ATN-SHOP',
-      name: username,
-      table_string: table,
-    });
+    session.user_id = username;
+    session.shopId = shopId;
+    session.role = role;
+
+
+    res.redirect('/users');
   }
   // for admin
   else if (authenticated == true & role == 'admin') {
-    let box_string = await gen_box();
-    let table = await display_products(shopId);
-    res.render('admin', {
-      title: 'welcome Admin to ATN-SHOP',
-      name: username,
-      select_box: box_string,
-      table_string: table,
-    });
+    session.user_id = username;
+    session.shopId = shopId;
+    session.role = role;
+
+    res.redirect('/admin');
   }
   else {
     res.render('login', {
@@ -52,20 +51,8 @@ router.post('/login', async function (req, res, next) {
 
 });
 
-// display for each shop
-router.post('/select_box', async function (req, res, next) {
-  let shop_id = req.body.shop;
-  console.log("VALUE: " + shop_id);
-  let box_string = await gen_box();
-  let table = await display_products(shop_id);
 
-  res.render('admin', {
-    title: 'welcome to ATN SHOP',
-    message: 'Hi',
-    select_box: box_string,
-    table_string: table,
-  });
-});
+
 
 router.post('/login/shops', function (req, reks, next) {
   pg_con.connect(function (err) {
@@ -86,6 +73,14 @@ router.post('/login/shops', function (req, reks, next) {
   })
 
 });
+
+
+// logout
+router.get('/logout', function (req, res, next) {
+  req.session.destroy();
+  res.render('index', { title: 'ATN SHOP' });
+})
+
 
 
 

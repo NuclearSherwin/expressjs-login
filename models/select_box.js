@@ -10,7 +10,7 @@ async function gen_box() {
     const data = await pg_connect.query(queryCommand);
 
     let box_string =
-        `<form method='post' action="select_box">
+        `<form method='post' action="/admin/select_box">
             <label for="shop">Choose a shop:</label>
                 <select name="shop" id="shop_id">
                     <option name="allShop" value="0" selected>All shops</option>
