@@ -9,7 +9,7 @@ async function crud(req_body) {
     let price = req_body.price;
     let shop_id = req_body.shop_id;
 
-    if (req_body.crud == 'update') {
+    if (req_body.crud == 'edit') {
         // query updateQuery
         var query = {
             text: `UPDATE products

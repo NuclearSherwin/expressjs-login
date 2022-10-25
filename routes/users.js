@@ -32,7 +32,7 @@ router.post('/crud', async (req, res, next) => {
   session = req.session;
   console.log(session);
   // update
-  console.log('Body : ' + req.body);
+  console.log(req.body);
   let results = await crud(req.body);
   console.log(results);
   // refresh the page

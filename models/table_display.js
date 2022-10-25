@@ -71,7 +71,7 @@ red
   let num_rows = data.rows.length;
   for (let i = 0; i < num_rows; i++) {
     table_string += `
-      <form action="crud" method="post">
+      <form action="/users/crud" method="post">
         <tr>`;
     for (let j = 0; j < num_fields; j++) {
       let field_name = data.fields[j].name;
@@ -90,7 +90,7 @@ red
   }
 
   // add form submit for insert
-  table_string += `<form action="/user/crud" method="post"><tr>`
+  table_string += `<form action="/users/crud" method="post"><tr>`
   for (let j = 0; j < num_fields; j++) {
     let field_name = data.fields[j].name;
     table_string += `<td><input type='text' name=${field_name}></td>`;
